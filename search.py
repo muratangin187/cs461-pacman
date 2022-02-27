@@ -119,7 +119,7 @@ def breadthFirstSearch(problem: SearchProblem):
     while q.isEmpty() is False:
         current = q.pop()
         if visited.get(str(current[0][0]) + "-" + str(current[0][1])) == True:
-            continue;
+            continue
         visited[str(current[0][0]) + "-" + str(current[0][1])] = True
         if current[1] != "None":
             res.append(current[1])
@@ -137,7 +137,30 @@ def breadthFirstSearch(problem: SearchProblem):
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visited = set()
+    q = util.PriorityQueue()
+    q.push((SearchProblem.getStartState(), [], 0))
+
+    flag = False
+
+    while not q.isEmpty():
+        flag = False
+        node, way = q.pop()
+        if problem.isGoalState(node):
+            return way
+        elif node in visited:
+            flag = True
+        
+        if flag == False:
+            visited.add(node)
+            for successor, action, stepCost in problem.getSuccessors(node):
+                if successor not in visited:
+                    if successor not in q.heap:
+                        q.push((successor, way + [action]), stepCost)
+
+    return 0
+    
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -149,7 +172,31 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visited = set()
+    q = util.PriorityQueue()
+    q.push((SearchProblem.getStartState(), [], 0))
+
+    flag = False
+
+    while not q.isEmpty():
+        flag = False
+        node, way = q.pop()
+        if problem.isGoalState(node):
+            return way
+        elif node in visited:
+            flag = True
+        
+        if flag == False:
+            visited.add(node)
+            for successor, action, stepCost in problem.getSuccessors(node):
+                if successor not in visited:
+                    if successor not in q.heap:
+                        q.push((successor, way + [action]), stepCost + heuristic(successor, problem))
+
+    return 0
+
+
+
 
 
 # Abbreviations
