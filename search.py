@@ -98,7 +98,6 @@ def depthFirstSearch(problem: SearchProblem):
         for successor in successors:
             cPath = currentPath.copy()
             if successor[1] is not None:
-                # print(type(successor[1]))
                 cPath.append(successor[1])
                 res = dfsRec(successor[0], visitedNodes, cPath)
                 if res is not None:
@@ -133,7 +132,6 @@ def breadthFirstSearch(problem: SearchProblem):
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
     visited = set()
     q = util.PriorityQueue()
     q.push((problem.getStartState(), []), 0)
@@ -155,11 +153,9 @@ def uniformCostSearch(problem: SearchProblem):
                 if successor not in visited:
                     if successor not in q.heap:
                         if costs.get(str(way)): 
-                            # print("GET COST IS: " + str(costs.get(str(way))) + " + " + str(stepCost))
                             q.push((successor, way + [action]), costs.get(str(way)) + stepCost)
                             costs[str(way + [action])] = costs.get(str(way)) + stepCost
                         else:
-                            # print("NOT GETCOST IS: " + str(costs.get(str(way))) +  " + " + str(stepCost))
                             q.push((successor, way + [action]), stepCost)
                             costs[str(way + [action])] = stepCost
     return 0
@@ -175,7 +171,6 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
     visited = set()
     q = util.PriorityQueue()
     q.push((problem.getStartState(), []), 0)
