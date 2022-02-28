@@ -73,41 +73,23 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem: SearchProblem):
-    """
-    Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-    """
-
-    # print("Start:", problem.getStartState())
-    # print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-
-    def dfsRec(currentState, visitedNodes, currentPath):
-        if currentState in visitedNodes:
-            return None
-        visitedNodes.append(currentState)
-        isGoalState = problem.isGoalState(currentState)
-        if isGoalState == True:
-            return currentPath
-        successors = problem.getSuccessors(currentState)
-        for successor in successors:
-            cPath = currentPath.copy()
-            if successor[1] is not None:
-                cPath.append(successor[1])
-                res = dfsRec(successor[0], visitedNodes, cPath)
-                if res is not None:
-                    return res
-
-    startState = problem.getStartState()
-
-    result = dfsRec(startState, [], [])
-
-    return result
+    q = util.Stack()
+    q.push((problem.getStartState(), []))
+    visited = {}
+    found = False
+    while q.isEmpty() is False:
+        current = q.pop()
+        if problem.isGoalState(current[0]):
+            return current[1] 
+        if visited.get(current[0]) == True:
+            continue
+        visited[current[0]] = True
+        succs = problem.getSuccessors(current[0])
+        for succ in succs:
+            resC = current[1].copy()
+            resC.append(succ[1])
+            q.push((succ[0], resC))
+    return None
 
 def breadthFirstSearch(problem: SearchProblem):
     q = util.Queue()
