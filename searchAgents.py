@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -379,7 +379,19 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    closest_goal = 0
+    (curr_x, curr_y), rem_corners = state
+
+    for corner in corners:
+        if corner in rem_corners:
+            corner_x, corner_y = corner
+            estimated_cost = abs(curr_x - corner_x) + abs(curr_y - corner_y)
+            #  by using manhattan heuristic
+            if closest_goal < estimated_cost:
+                closest_goal = estimated_cost
+
+    return closest_goal
+
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -473,7 +485,17 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+
+    # finding the closest food position
+    food_list = list(foodGrid.asList())
+    max_cost = 0
+    curr_x, curr_y = position
+    for point in food_list:
+        f_x, f_y = point
+        if max_cost < abs(curr_x - f_x) + abs(curr_y - f_y):
+            max_cost = abs(curr_x - f_x) + abs(curr_y - f_y)
+
+    return max_cost
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -504,7 +526,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.breadthFirstSearch(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
