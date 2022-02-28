@@ -136,9 +136,10 @@ def uniformCostSearch(problem: SearchProblem):
     "*** YOUR CODE HERE ***"
     visited = set()
     q = util.PriorityQueue()
-    q.push((SearchProblem.getStartState(), [], 0))
+    q.push((problem.getStartState(), []), 0)
 
     flag = False
+    costs = {}
 
     while not q.isEmpty():
         flag = False
@@ -153,8 +154,14 @@ def uniformCostSearch(problem: SearchProblem):
             for successor, action, stepCost in problem.getSuccessors(node):
                 if successor not in visited:
                     if successor not in q.heap:
-                        q.push((successor, way + [action]), stepCost)
-
+                        if costs.get(str(way)): 
+                            # print("GET COST IS: " + str(costs.get(str(way))) + " + " + str(stepCost))
+                            q.push((successor, way + [action]), costs.get(str(way)) + stepCost)
+                            costs[str(way + [action])] = costs.get(str(way)) + stepCost
+                        else:
+                            # print("NOT GETCOST IS: " + str(costs.get(str(way))) +  " + " + str(stepCost))
+                            q.push((successor, way + [action]), stepCost)
+                            costs[str(way + [action])] = stepCost
     return 0
     
 
@@ -171,9 +178,10 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     visited = set()
     q = util.PriorityQueue()
-    q.push((SearchProblem.getStartState(), [], 0))
+    q.push((problem.getStartState(), []), 0)
 
     flag = False
+    costs = {}
 
     while not q.isEmpty():
         flag = False
@@ -188,13 +196,13 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
             for successor, action, stepCost in problem.getSuccessors(node):
                 if successor not in visited:
                     if successor not in q.heap:
-                        q.push((successor, way + [action]), stepCost + heuristic(successor, problem))
-
+                        if costs.get(str(way)): 
+                            q.push((successor, way + [action]), costs.get(str(way)) + stepCost + heuristic(successor, problem))
+                            costs[str(way + [action])] = costs.get(str(way)) + stepCost
+                        else:
+                            q.push((successor, way + [action]), stepCost + heuristic(successor, problem))
+                            costs[str(way + [action])] = stepCost
     return 0
-
-
-
-
 
 # Abbreviations
 bfs = breadthFirstSearch
